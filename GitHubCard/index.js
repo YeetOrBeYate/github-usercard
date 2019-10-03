@@ -95,11 +95,13 @@ const entry = document.querySelector('.cards');
 
 axios.get('https://api.github.com/users/YeetOrBeYate')
   .then((res) => {
-    entry.appendChild(makePerson(res.data))
+    let kyle = res;
+    entry.appendChild(makePerson(kyle.data))
 
-    axios.get(res.data.followers_url)
+    axios.get(kyle.data.followers_url)
     .then((res)=>{
-      res.data.forEach((fr)=>{
+      let people = res;
+      people.data.forEach((fr)=>{
 
           axios.get(`https://api.github.com/users/${fr.login}`)
             .then((res)=>{
