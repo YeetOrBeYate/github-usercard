@@ -75,6 +75,7 @@ function makePerson(person){
   location.innerText = person.location;
   address.innerText = person.html_url;
   address.href = person.html_url;
+  bio.innerText = person.bio;
   followers.innerText = `Followers: ${person.followers}`;
   following.innerText = `Following: ${person.following}`;
 //appending
@@ -96,6 +97,8 @@ const entry = document.querySelector('.cards');
 axios.get('https://api.github.com/users/YeetOrBeYate')
   .then((res) => {
     let kyle = res;
+    console.log(kyle.data);
+    
     entry.appendChild(makePerson(kyle.data))
 
     axios.get(kyle.data.followers_url)
