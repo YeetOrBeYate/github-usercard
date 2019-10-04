@@ -62,12 +62,14 @@ function makePerson(person){
           address = document.createElement('a'),
         followers = document.createElement('p'),
         following = document.createElement('p'),
-        bio = document.createElement('p');
+        bio = document.createElement('p'),
+        calender = document.createElement('div');
 //adding classes
   card.classList.add('card');
   cardInfo.classList.add('card-info');
   name.classList.add('name');
   userName.classList.add('username');
+  calender.classList.add('calender');
 //adding info
   image.src = person.avatar_url;
   name.innerText = person.name;
@@ -78,6 +80,9 @@ function makePerson(person){
   bio.innerText = person.bio;
   followers.innerText = `Followers: ${person.followers}`;
   following.innerText = `Following: ${person.following}`;
+  calender.innerText = `${person.login}`;
+  calender.id = `card-${person.login}`;
+  
 //appending
   card.appendChild(image);
   card.appendChild(cardInfo);
@@ -88,8 +93,8 @@ function makePerson(person){
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
+  cardInfo.appendChild(calender);
   profile.appendChild(address);
-
   return card;
 }
 const entry = document.querySelector('.cards');
@@ -97,22 +102,34 @@ const entry = document.querySelector('.cards');
 axios.get('https://api.github.com/users/YeetOrBeYate')
   .then((res) => {
     let kyle = res;
-    console.log(kyle.data);
-    
     entry.appendChild(makePerson(kyle.data))
+    new GitHubCalendar(document.getElementById(`card-${res.data.login}`), res.data.login, {responsive: true});
+  console.log(res.data.login);
+    
 
+    //here im making another api call to kyle's followers
     axios.get(kyle.data.followers_url)
     .then((res)=>{
       let people = res;
-      people.data.forEach((fr)=>{
 
+      //here I'm just repeating the first api call for the array of followers I now have and am appending them after Kyle
+      people.data.forEach((fr)=>{
           axios.get(`https://api.github.com/users/${fr.login}`)
             .then((res)=>{
               entry.appendChild(makePerson(res.data))
+              new GitHubCalendar(document.getElementById(`card-${res.data.login}`), res.data.login, {responsive: true});
+              
             })
         })
     })
 })
+
+const yeet = document.querySelectorAll('.calender');
+console.log(yeet);
+
+
+
+
 
 
 
